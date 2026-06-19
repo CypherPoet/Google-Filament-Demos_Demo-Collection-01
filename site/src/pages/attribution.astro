@@ -1,0 +1,62 @@
+---
+import Base from '../layouts/Base.astro';
+import { site, models } from '../data/content';
+---
+
+<Base
+  title="Asset Credits & Licensing"
+  description="Sources, licenses, and attribution for the 3D models used in Filament Demo Lab.">
+  <header class="subhero">
+    <div class="container">
+      <a class="back-link" href="/">← {site.name}</a>
+      <span class="eyebrow">Asset sources &amp; licensing</span>
+      <h1 class="subhero-title">Every model is documented and clearly licensed</h1>
+      <p class="section-lede">
+        All models come from the Khronos glTF Sample Assets project. Four are public-domain CC0; the
+        animated Fox carries CC BY 4.0 components (rig + conversion) and is attributed accordingly.
+      </p>
+    </div>
+  </header>
+
+  <section class="section" style="border-top:none;padding-top:0">
+    <div class="container">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Model</th><th>Author</th><th>License</th><th>Attribution</th><th>Size</th><th>Used in</th></tr>
+          </thead>
+          <tbody>
+            {
+              models.map((m) => (
+                <tr>
+                  <td><span class="concept">{m.name}</span></td>
+                  <td>{m.author}</td>
+                  <td>
+                    <span class={`lic ${m.license.startsWith('CC0') && !m.license.includes('BY') ? 'cc0' : ''}`}>
+                      {m.license}
+                    </span>
+                  </td>
+                  <td>{m.attribution}</td>
+                  <td class="mono">{m.size}</td>
+                  <td>{m.usedIn}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+      <div class="note">
+        Fox attribution: model by PixelMannen (CC0 1.0); rigging &amp; animation by tomkranis
+        (CC BY 4.0); glTF conversion by @AsoboStudio and @scurest (CC BY 4.0). The Damaged Helmet
+        sample was deliberately excluded — it carries a CC BY-NC (non-commercial) component.
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <span>{site.name} · built with React Native Filament, rendered over Metal.</span>
+      <span><a href="/">Home</a> · <a href={site.rnFilamentUrl}>react-native-filament</a> · <a href={site.filamentUrl}>Google Filament</a></span>
+    </div>
+  </footer>
+</Base>

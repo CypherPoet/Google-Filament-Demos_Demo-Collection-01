@@ -481,9 +481,8 @@ p {
 /* ---------- Architecture diagram ---------- */
 .arch {
   margin-top: 40px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 22px;
+  max-width: 480px;
+  margin-inline: auto;
 }
 
 .arch-col {
@@ -674,6 +673,35 @@ td code,
   border-radius: 0 10px 10px 0;
   color: var(--text-2);
   font-size: 14px;
+}
+
+/* ---------- Sub-page header (e.g. /attribution) ---------- */
+.subhero {
+  padding-block: clamp(40px, 8vw, 84px) clamp(18px, 4vw, 32px);
+}
+
+.back-link {
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-2);
+  margin-bottom: 24px;
+  transition: color 0.12s ease;
+}
+
+.back-link:hover {
+  color: var(--accent);
+}
+
+.subhero-title {
+  font-size: clamp(28px, 5vw, 44px);
+  font-weight: 800;
+  margin-top: 12px;
+}
+
+.run-local {
+  max-width: 540px;
+  margin-top: 24px;
 }
 
 @media (max-width: 880px) {

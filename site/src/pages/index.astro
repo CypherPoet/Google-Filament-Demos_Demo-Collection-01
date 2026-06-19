@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import { site, demos, models, transferNotes } from '../data/content';
+import { site, demos, transferNotes } from '../data/content';
 ---
 
 <Base>
@@ -116,14 +116,14 @@ import { site, demos, models, transferNotes } from '../data/content';
   <section class="section" id="architecture">
     <div class="container">
       <span class="eyebrow">Technical architecture</span>
-      <h2 class="section-title">Two separate pieces</h2>
+      <h2 class="section-title">From a GLB file to the GPU</h2>
       <p class="section-lede">
-        The native rendering pipeline (left) is entirely independent of this showcase website
-        (right). The site never runs Filament.
+        Every demo follows the same native path: a licensed GLB is bundled by Metro, handed to
+        react-native-filament, and drawn by Filament's engine over Metal — no WebGL, no browser
+        canvas. This site only documents it.
       </p>
       <div class="arch">
         <div class="arch-col">
-          <h3>Native rendering pipeline</h3>
           <div class="flow">
             <div class="flow-node">CC0 / permissively-licensed 3D assets<small>Khronos glTF Sample Assets</small></div>
             <div class="flow-arrow">↓ optional cleanup / conversion</div>
@@ -134,20 +134,6 @@ import { site, demos, models, transferNotes } from '../data/content';
             <div class="flow-node">Native Filament renderer<small>Metal on iOS</small></div>
             <div class="flow-arrow">↓</div>
             <div class="flow-node">iOS / Android GPU</div>
-          </div>
-        </div>
-        <div class="arch-col">
-          <h3>This showcase website</h3>
-          <div class="flow">
-            <div class="flow-node accent">Astro static site<small>built to a plain dist/ folder</small></div>
-            <div class="flow-arrow">↓</div>
-            <div class="flow-node">Screenshots, video, write-ups, repo links</div>
-            <div class="flow-arrow">↓ git push</div>
-            <div class="flow-node">Netlify CDN</div>
-          </div>
-          <div class="note" style="margin-top:24px">
-            The website and the mobile app live in the same monorepo (<span class="mono">/site</span>
-            and <span class="mono">/mobile</span>) but ship to completely different targets.
           </div>
         </div>
       </div>
@@ -184,84 +170,24 @@ import { site, demos, models, transferNotes } from '../data/content';
     </div>
   </section>
 
-  <!-- ===== Assets & licensing ===== -->
-  <section class="section" id="assets">
-    <div class="container">
-      <span class="eyebrow">Asset sources & licensing</span>
-      <h2 class="section-title">Every model is documented and clearly licensed</h2>
-      <p class="section-lede">
-        All assets come from the Khronos glTF Sample Assets project. Four are public-domain CC0; the
-        animated Fox carries CC BY 4.0 components (rig + conversion) and is attributed accordingly.
-      </p>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr><th>Model</th><th>Author</th><th>License</th><th>Attribution</th><th>Size</th><th>Used in</th></tr>
-          </thead>
-          <tbody>
-            {
-              models.map((m) => (
-                <tr>
-                  <td><span class="concept">{m.name}</span></td>
-                  <td>{m.author}</td>
-                  <td>
-                    <span class={`lic ${m.license.startsWith('CC0') && !m.license.includes('BY') ? 'cc0' : ''}`}>
-                      {m.license}
-                    </span>
-                  </td>
-                  <td>{m.attribution}</td>
-                  <td class="mono">{m.size}</td>
-                  <td>{m.usedIn}</td>
-                </tr>
-              ))
-            }
-          </tbody>
-        </table>
-      </div>
-      <div class="note">
-        Fox attribution: model by PixelMannen (CC0 1.0); rigging &amp; animation by tomkranis
-        (CC BY 4.0); glTF conversion by @AsoboStudio and @scurest (CC BY 4.0). The Damaged Helmet
-        sample was deliberately excluded — it carries a CC BY-NC (non-commercial) component.
-      </div>
-    </div>
-  </section>
-
   <!-- ===== Build / run ===== -->
   <section class="section" id="build">
     <div class="container">
       <span class="eyebrow">Build & run</span>
-      <h2 class="section-title">Run it locally</h2>
-      <div class="cols-2">
-        <div>
-          <h3 style="font-size:16px;margin-bottom:6px">Mobile app (iOS Simulator)</h3>
-          <div class="code">
-            <pre><span class="c"># from the repo root</span>
+      <h2 class="section-title">Run the demos locally</h2>
+      <div class="run-local">
+        <h3 style="font-size:16px;margin-bottom:6px">Mobile app (iOS Simulator)</h3>
+        <div class="code">
+          <pre><span class="c"># from the repo root</span>
 cd mobile
 npm install
 cd ios && pod install && cd ..
 npm run ios</pre>
-          </div>
-          <p class="section-lede" style="font-size:14px">
-            Requires macOS, Xcode, and CocoaPods. The <span class="mono">pod install</span> step
-            patches React Native's vendored <span class="mono">fmt</span> for the Xcode 26 clang.
-          </p>
         </div>
-        <div>
-          <h3 style="font-size:16px;margin-bottom:6px">Showcase site (this page)</h3>
-          <div class="code">
-            <pre>cd site
-npm install
-npm run dev
-npm run build   <span class="c"># → dist/</span></pre>
-          </div>
-          <h3 style="font-size:16px;margin:24px 0 6px">Netlify deploy</h3>
-          <div class="code">
-            <pre><span class="k">[build]</span>
-  base = "site"
-  command = "npm run build"
-  publish = "dist"</pre>
-          </div>
-        </div>
+        <p class="section-lede" style="font-size:14px">
+          Requires macOS, Xcode, and CocoaPods. On RN 0.84+ the <span class="mono">pod install</span>
+          step pulls a prebuilt React Native Core, so the iOS build needs no source patches.
+        </p>
       </div>
     </div>
   </section>
@@ -269,7 +195,7 @@ npm run build   <span class="c"># → dist/</span></pre>
   <footer class="footer">
     <div class="container">
       <span>{site.name} · built with React Native Filament, rendered over Metal.</span>
-      <span><a href={site.repo}>Source</a> · <a href={site.rnFilamentUrl}>react-native-filament</a> · <a href={site.filamentUrl}>Google Filament</a></span>
+      <span><a href="/attribution">Asset credits</a> · <a href={site.repo}>Source</a> · <a href={site.rnFilamentUrl}>react-native-filament</a> · <a href={site.filamentUrl}>Google Filament</a></span>
     </div>
   </footer>
 
