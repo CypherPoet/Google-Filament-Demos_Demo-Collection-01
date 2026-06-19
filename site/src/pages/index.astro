@@ -1,0 +1,267 @@
+---
+import Base from '../layouts/Base.astro';
+import { site, demos, models, transferNotes } from '../data/content';
+---
+
+<Base>
+  <!-- ===== Hero ===== -->
+  <header class="hero">
+    <div class="container hero-grid">
+      <div>
+        <span class="pill"><span class="dot"></span>React Native · Google Filament</span>
+        <h1>Filament<br /><span class="accent">Demo Lab</span></h1>
+        <p class="hero-lede">{site.tagline}</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href={site.repo}>View source ↗</a>
+          <a class="btn" href="#demos">Explore the demos</a>
+        </div>
+        <div class="hero-stack">
+          {site.stack.map((s) => <span class="chip">{s}</span>)}
+        </div>
+      </div>
+      <div class="phone" aria-hidden="false">
+        <div class="phone-screen">
+          <video
+            src="/media/spin.mp4"
+            poster="/media/spin-poster.png"
+            autoplay
+            loop
+            muted
+            playsinline
+            aria-label="A BoomBox model rendered and spinning in the iOS app"></video>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== What this is ===== -->
+  <section class="section" id="about">
+    <div class="container">
+      <span class="eyebrow">What this is</span>
+      <h2 class="section-title">A mobile-native rendering project — not a browser demo</h2>
+      <div class="cols-2 prose" style="margin-top:28px">
+        <div>
+          <p>
+            <strong>Filament Demo Lab</strong> is a React Native app built on
+            <a class="mono" href={site.rnFilamentUrl}>react-native-filament</a>, Margelo's
+            binding to <a class="mono" href={site.filamentUrl}>Google Filament</a>. Filament is a
+            real-time physically-based renderer; on iOS it draws through Metal, on Android through
+            Vulkan/OpenGL. The rendering runs <strong>natively on the device</strong> — there is no
+            WebGL and no browser canvas involved.
+          </p>
+          <p>
+            Because of that, this website is a <strong>showcase, not the runtime</strong>. It
+            documents the work with screenshots, write-ups, and the full source — the live 3D runs
+            on an iOS Simulator or device.
+          </p>
+        </div>
+        <div>
+          <p>
+            Three.js is not used in the app, but prior Three.js, Blender, and Godot experience maps
+            cleanly onto Filament: the same scene graph, PBR materials, cameras, lights, IBL, glTF
+            assets, and animation concepts all carry over. The
+            <a href="#transfer">transfer notes</a> below line the two APIs up side by side.
+          </p>
+          <div class="note">
+            The four demos cover the practical surface area of a real 3D feature: loading GLB
+            assets, framing a camera, lighting a scene, handling gestures, swapping materials, and
+            playing skeletal animation.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Demo gallery ===== -->
+  <section class="section" id="demos">
+    <div class="container">
+      <span class="eyebrow">Demo gallery</span>
+      <h2 class="section-title">Four scenes, four techniques</h2>
+      <p class="section-lede">
+        Each demo is a full-screen Filament view with a React Native overlay layered on top —
+        never inside — the rendering surface.
+      </p>
+      <div class="gallery">
+        {
+          demos.map((demo) => (
+            <article class="card">
+              <div class="card-shot">
+                <span class="card-num">DEMO {demo.num}</span>
+                <img src={demo.image} alt={`${demo.title} demo screen`} loading="lazy" />
+              </div>
+              <div class="card-body">
+                <h3>{demo.title}</h3>
+                <p class="tagline">{demo.tagline}</p>
+                <ul class="demonstrates">
+                  {demo.demonstrates.map((d) => <li>{d}</li>)}
+                </ul>
+                <p class="card-model">{demo.model}</p>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Architecture ===== -->
+  <section class="section" id="architecture">
+    <div class="container">
+      <span class="eyebrow">Technical architecture</span>
+      <h2 class="section-title">Two separate pieces</h2>
+      <p class="section-lede">
+        The native rendering pipeline (left) is entirely independent of this showcase website
+        (right). The site never runs Filament.
+      </p>
+      <div class="arch">
+        <div class="arch-col">
+          <h3>Native rendering pipeline</h3>
+          <div class="flow">
+            <div class="flow-node">CC0 / permissively-licensed 3D assets<small>Khronos glTF Sample Assets</small></div>
+            <div class="flow-arrow">↓ optional cleanup / conversion</div>
+            <div class="flow-node">GLB files<small>single self-contained binaries</small></div>
+            <div class="flow-arrow">↓ Metro asset bundling</div>
+            <div class="flow-node accent">React Native app<small>react-native-filament</small></div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-node">Native Filament renderer<small>Metal on iOS</small></div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-node">iOS / Android GPU</div>
+          </div>
+        </div>
+        <div class="arch-col">
+          <h3>This showcase website</h3>
+          <div class="flow">
+            <div class="flow-node accent">Astro static site<small>built to a plain dist/ folder</small></div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-node">Screenshots, video, write-ups, repo links</div>
+            <div class="flow-arrow">↓ git push</div>
+            <div class="flow-node">Netlify CDN</div>
+          </div>
+          <div class="note" style="margin-top:24px">
+            The website and the mobile app live in the same monorepo (<span class="mono">/site</span>
+            and <span class="mono">/mobile</span>) but ship to completely different targets.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Transfer notes ===== -->
+  <section class="section" id="transfer">
+    <div class="container">
+      <span class="eyebrow">Three.js · Blender · Godot → Filament</span>
+      <h2 class="section-title">The concepts transfer; the API is new</h2>
+      <p class="section-lede">
+        Every idea below already exists in Three.js (and most in Blender / Godot). Filament renames
+        the pieces, but the mental model is the same.
+      </p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Concept</th><th>Three.js / prior tools</th><th>react-native-filament</th></tr>
+          </thead>
+          <tbody>
+            {
+              transferNotes.map((row) => (
+                <tr>
+                  <td><span class="concept">{row.concept}</span></td>
+                  <td>{row.prior}</td>
+                  <td>{row.filament}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Assets & licensing ===== -->
+  <section class="section" id="assets">
+    <div class="container">
+      <span class="eyebrow">Asset sources & licensing</span>
+      <h2 class="section-title">Every model is documented and clearly licensed</h2>
+      <p class="section-lede">
+        All assets come from the Khronos glTF Sample Assets project. Four are public-domain CC0; the
+        animated Fox carries CC BY 4.0 components (rig + conversion) and is attributed accordingly.
+      </p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Model</th><th>Author</th><th>License</th><th>Attribution</th><th>Size</th><th>Used in</th></tr>
+          </thead>
+          <tbody>
+            {
+              models.map((m) => (
+                <tr>
+                  <td><span class="concept">{m.name}</span></td>
+                  <td>{m.author}</td>
+                  <td>
+                    <span class={`lic ${m.license.startsWith('CC0') && !m.license.includes('BY') ? 'cc0' : ''}`}>
+                      {m.license}
+                    </span>
+                  </td>
+                  <td>{m.attribution}</td>
+                  <td class="mono">{m.size}</td>
+                  <td>{m.usedIn}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+      <div class="note">
+        Fox attribution: model by PixelMannen (CC0 1.0); rigging &amp; animation by tomkranis
+        (CC BY 4.0); glTF conversion by @AsoboStudio and @scurest (CC BY 4.0). The Damaged Helmet
+        sample was deliberately excluded — it carries a CC BY-NC (non-commercial) component.
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Build / run ===== -->
+  <section class="section" id="build">
+    <div class="container">
+      <span class="eyebrow">Build & run</span>
+      <h2 class="section-title">Run it locally</h2>
+      <div class="cols-2">
+        <div>
+          <h3 style="font-size:16px;margin-bottom:6px">Mobile app (iOS Simulator)</h3>
+          <div class="code">
+            <pre><span class="c"># from the repo root</span>
+cd mobile
+npm install
+cd ios && pod install && cd ..
+npm run ios</pre>
+          </div>
+          <p class="section-lede" style="font-size:14px">
+            Requires macOS, Xcode, and CocoaPods. The <span class="mono">pod install</span> step
+            patches React Native's vendored <span class="mono">fmt</span> for the Xcode 26 clang.
+          </p>
+        </div>
+        <div>
+          <h3 style="font-size:16px;margin-bottom:6px">Showcase site (this page)</h3>
+          <div class="code">
+            <pre>cd site
+npm install
+npm run dev
+npm run build   <span class="c"># → dist/</span></pre>
+          </div>
+          <h3 style="font-size:16px;margin:24px 0 6px">Netlify deploy</h3>
+          <div class="code">
+            <pre><span class="k">[build]</span>
+  base = "site"
+  command = "npm run build"
+  publish = "dist"</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <span>{site.name} · built with React Native Filament, rendered over Metal.</span>
+      <span><a href={site.repo}>Source</a> · <a href={site.rnFilamentUrl}>react-native-filament</a> · <a href={site.filamentUrl}>Google Filament</a></span>
+    </div>
+  </footer>
+</Base>

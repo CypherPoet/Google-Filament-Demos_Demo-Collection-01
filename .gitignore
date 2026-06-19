@@ -1,0 +1,43 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Logs / env
+*.log
+npm-debug.log*
+.env
+.env.*
+!.env.example
+
+# macOS
+.DS_Store
+
+# ----- Mobile (React Native / iOS) build artifacts -----
+mobile/ios/Pods/
+mobile/ios/build/
+mobile/ios/*.xcworkspace/xcuserdata/
+mobile/ios/*.xcodeproj/xcuserdata/
+mobile/android/.gradle/
+mobile/android/app/build/
+mobile/android/build/
+DerivedData/
+*.hprof
+
+# Metro
+.metro-health-check*
+mobile/.metro/
+
+# ----- Site (Astro) -----
+site/dist/
+site/.astro/
+
+# Editor
+.vscode/
+.idea/
+
+# Claude Code session tooling + internal planning brief (not project deliverables)
+.claude/
+docs/private/
+
+# Keep the .glb model assets and captured showcase media committed — they are
+# CC0 / clearly licensed and make the repo runnable out of the box.
