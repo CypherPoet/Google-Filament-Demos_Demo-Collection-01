@@ -32,7 +32,9 @@ export function useOrbitControls({
   const cameraManipulator = useCameraManipulator({
     orbitHomePosition: orbitHomePosition ?? [0, 0.3, 3.6],
     targetPosition: targetPosition ?? [0, 0, 0],
-    orbitSpeed: [0.05, 0.05],
+    // Radians of orbit per pixel of drag. Filament's default (0.01) gives a
+    // controllable feel — roughly a half-turn across a phone's screen width.
+    orbitSpeed: [0.01, 0.01],
   });
 
   // Mutable view height, kept current via onLayout and read inside gestures.
