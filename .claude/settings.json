@@ -1,7 +1,4 @@
 {
-  "enabledPlugins": {
-    "netlify-skills@netlify-context-and-tools": true
-  },
   "hooks": {
     "SessionStart": [
       {
@@ -15,5 +12,9 @@
         ]
       }
     ]
+  },
+  "enabledPlugins": {
+    "netlify-skills@netlify-context-and-tools": true,
+    "cypherpoet-google-filament-kit@cypherpoet-toolchest": true
   }
 }
