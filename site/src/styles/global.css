@@ -457,13 +457,19 @@ p {
   transform: scale(1);
 }
 
-.lightbox-figure img {
+.lightbox-figure img,
+.lightbox-figure video {
   width: 100%;
   max-height: 78vh;
   object-fit: contain;
   border-radius: var(--radius);
   border: 1px solid var(--border-strong);
   box-shadow: 0 40px 120px -30px oklch(0 0 0 / 0.9);
+}
+
+.lightbox-figure img[hidden],
+.lightbox-figure video[hidden] {
+  display: none;
 }
 
 .lightbox-figure figcaption {
