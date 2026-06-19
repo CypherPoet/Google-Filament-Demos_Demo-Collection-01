@@ -59,7 +59,7 @@ Requires **macOS + Xcode + CocoaPods + Node**.
 ```bash
 cd mobile
 npm install
-cd ios && pod install && cd ..   # also patches RN's vendored fmt for Xcode 26 (see Notes)
+cd ios && pod install && cd ..   # installs pods (RN 0.84+ uses a prebuilt React Native Core)
 npm run ios                       # builds + launches on the iOS Simulator
 ```
 
@@ -81,15 +81,15 @@ npm run preview  # preview the production build
 
 | | Version | Notes |
 |---|---|---|
-| React Native | `0.83.1` | New Architecture (Fabric) enabled |
+| React Native | `0.86.0` | New Architecture (Fabric); prebuilt React Native Core on iOS |
 | react-native-filament | `1.11.0` | Google Filament binding (Metal on iOS) |
 | react-native-worklets-core | `1.6.x` | Required by Filament for its render thread |
-| react-native-gesture-handler | `2.x` | Orbit / pinch camera controls |
-| React | `19.2.0` | |
+| react-native-gesture-handler | `3.x` | Orbit / pinch camera controls |
+| React | `19.2.x` | |
 | TypeScript | `5.8` | |
 | Astro | `6.x` | Static showcase site |
 
-Versions were pinned to match `react-native-filament`'s own example app (`examples/AppExampleFabric`) — the maintainer‑tested combination — to maximise the chance of a clean native build.
+The app runs on the **latest** React Native (0.86) and gesture-handler (3.x) — *ahead* of what `react-native-filament`'s own example app pins (RN 0.83.1 / gesture-handler 2.x). That combination is verified building and running all four demos on Xcode 26. Filament's loose peer dependencies (`react-native: *`) make this safe, and RN 0.84+'s **prebuilt React Native Core** actually makes the iOS build *simpler* than the older pinned setup — see [Notes & gotchas](#-notes--gotchas-what-was-actually-learned).
 
 ---
 
@@ -160,9 +160,9 @@ Takeaway: GLB just repackages the same buffers + textures into one container, an
 
 ## 🛠️ Notes & gotchas (what was actually learned)
 
-Building a bleeding‑edge stack (RN 0.83 + New Architecture + Xcode 26) against `react-native-filament` surfaced a few real issues — all fixed in this repo so it builds clean:
+Building a bleeding‑edge stack (RN 0.86 + New Architecture + Xcode 26) against `react-native-filament` surfaced a few real issues — all fixed in this repo so it builds clean:
 
-- **`fmt` won't compile under Xcode 26's clang.** RN 0.83 vendors `fmt` 11, which picks its `consteval` format‑string path when the compiler advertises `__cpp_consteval` — but that clang then rejects it (*"call to consteval function … is not a constant expression"*). A `post_install` hook in [`mobile/ios/Podfile`](mobile/ios/Podfile) patches `fmt/base.h` to pin `FMT_USE_CONSTEVAL 0`, re‑applied on every `pod install`.
+- **`fmt` and Xcode 26 (historical — now sidestepped).** Earlier on RN 0.83 this stack failed to compile because RN vendored `fmt` 11, which picks its `consteval` format‑string path when the compiler advertises `__cpp_consteval` — and Xcode 26's clang then rejected it (*"call to consteval function … is not a constant expression"*). Moving to **RN 0.86** resolved it for free: RN 0.84+ ships a **prebuilt React Native Core** binary, so `fmt` (and folly, boost, glog) are no longer compiled from source on iOS at all. The `post_install` hook in [`mobile/ios/Podfile`](mobile/ios/Podfile) that patched `fmt/base.h` now simply no‑ops (its `File.exist?` guard skips the now‑absent header); it's kept only as a fallback for source builds (`RCT_USE_PREBUILT_RNCORE=0`).
 - **Worklets babel plugins.** `react-native-worklets-core`'s babel plugin requires `@babel/preset-typescript` and the (now‑renamed) `@babel/plugin-proposal-optional-chaining` / `-nullish-coalescing-operator`. They're added as dev dependencies so Metro can transform worklets.
 - **Double‑release of native handles.** The same effect‑refire issue hits two of the library's manual‑release paths. `<EnvironmentalLight>` frees its KTX buffer after the first frame — [`src/components/lighting.tsx`](mobile/src/components/lighting.tsx) provides a drop‑in IBL that never manually releases (the buffer frees on unmount instead). And swapping `useModel`'s `source` in place double‑releases the previous `FilamentAsset` — the product viewer instead keys its scene on the model id so each switch is a clean remount.
 - **Animated transforms compound.** A shared‑value `rotate` is *multiplied* onto the entity's current transform every change — feeding an accumulating absolute angle blows the matrix up. Auto‑rotation instead applies a small per‑frame **delta** directly to the root entity.

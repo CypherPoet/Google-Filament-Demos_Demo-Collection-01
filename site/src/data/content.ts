@@ -6,7 +6,7 @@ export const site = {
   filamentUrl: 'https://github.com/google/filament',
   rnFilamentUrl: 'https://github.com/margelo/react-native-filament',
   stack: [
-    'React Native 0.83',
+    'React Native 0.86',
     'react-native-filament 1.11',
     'TypeScript',
     'Google Filament (Metal)',
