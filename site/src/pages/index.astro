@@ -40,7 +40,6 @@ import { site, demos, transferNotes } from '../data/content';
   <!-- ===== Demo gallery ===== -->
   <section class="section" id="demos">
     <div class="container">
-      <span class="eyebrow">Demo gallery</span>
       <h2 class="section-title">Four scenes, four techniques</h2>
       <p class="section-lede">
         Each demo is a full-screen Filament view with a React Native overlay layered on top —
@@ -80,7 +79,6 @@ import { site, demos, transferNotes } from '../data/content';
   <!-- ===== Architecture ===== -->
   <section class="section" id="architecture">
     <div class="container">
-      <span class="eyebrow">Technical architecture</span>
       <h2 class="section-title">From a GLB file to the GPU</h2>
       <p class="section-lede">
         Every demo follows the same native path: a licensed GLB is bundled by Metro, handed to
@@ -108,7 +106,6 @@ import { site, demos, transferNotes } from '../data/content';
   <!-- ===== Transfer notes ===== -->
   <section class="section" id="transfer">
     <div class="container">
-      <span class="eyebrow">Three.js · Blender · Godot → Filament</span>
       <h2 class="section-title">The concepts transfer; the API is new</h2>
       <p class="section-lede">
         Every idea below already exists in Three.js (and most in Blender / Godot). Filament renames
@@ -138,7 +135,6 @@ import { site, demos, transferNotes } from '../data/content';
   <!-- ===== Build / run ===== -->
   <section class="section" id="build">
     <div class="container">
-      <span class="eyebrow">Build & run</span>
       <h2 class="section-title">Run the demos locally</h2>
       <div class="run-local">
         <h3 style="font-size:16px;margin-bottom:6px">Mobile app (iOS Simulator)</h3>
@@ -180,6 +176,14 @@ npm run ios</pre>
   </div>
 
   <script>
+    // Respect reduced-motion: stop the auto-spin and let the user start it.
+    const spin = document.querySelector<HTMLVideoElement>('.phone-screen video');
+    if (spin && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      spin.removeAttribute('autoplay');
+      spin.setAttribute('controls', '');
+      spin.pause();
+    }
+
     const lb = document.getElementById('lightbox');
     const lbImg = document.getElementById('lightbox-img') as HTMLImageElement | null;
     const lbCaption = document.getElementById('lightbox-caption');
