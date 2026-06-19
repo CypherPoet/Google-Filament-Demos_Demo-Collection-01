@@ -4,6 +4,8 @@ A small but polished **React Native + [Google Filament](https://github.com/googl
 
 The mobile app uses [`react-native-filament`](https://github.com/margelo/react-native-filament) (Margelo's binding to Filament's native engine) to load `.glb` models and render them with PBR materials, image‑based lighting, gesture‑driven cameras, and skeletal animation — drawn on the GPU through **Metal** on iOS.
 
+### ▶ [**Live showcase site →**](https://filament-demo-lab.netlify.app)
+
 <p align="center">
   <img src="assets/showcase/boombox-spin.gif" alt="A BoomBox model rendered and spinning in the iOS app" width="280" />
 </p>
@@ -181,7 +183,7 @@ The site deploys from this repo with [`netlify.toml`](netlify.toml):
 
 Connect the GitHub repo to Netlify (or `cd site && npx netlify deploy --prod`). Only `/site` is built and published — the mobile app is never part of the web deploy.
 
-**Live site:** _add the Netlify URL here after the first deploy._
+**Live site:** **https://filament-demo-lab.netlify.app**
 
 ---
 
