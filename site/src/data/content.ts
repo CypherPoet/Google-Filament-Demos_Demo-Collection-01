@@ -66,6 +66,7 @@ export const demos: DemoCard[] = [
     tagline:
       'One high-fidelity PBR asset under four runtime lighting rigs — making clear what Filament controls live versus what is baked into the GLB.',
     image: '/media/demo-material.png',
+    video: '/media/demo-material.mp4',
     demonstrates: [
       'EnvironmentalLight (IBL) intensity control',
       'Directional light intensity, colour temperature, direction',
