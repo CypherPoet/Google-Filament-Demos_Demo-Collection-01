@@ -7,7 +7,7 @@
   --surface-2: oklch(1 0 0 / 0.08);
   --border: oklch(1 0 0 / 0.1);
   --border-strong: oklch(1 0 0 / 0.2);
-  --scrim: oklch(from var(--base) l c h / 0.72); /* base at 72% — badge / hint plates */
+  --scrim: oklch(0.15 0.02 280 / 0.72); /* --base at 72% — badge / hint plates */
 
   /* ---- Ink ---- */
   --text: oklch(0.97 0.004 280);
@@ -19,7 +19,6 @@
   --iris-bright: oklch(0.79 0.15 288);
   --iris-soft: oklch(0.72 0.16 286 / 0.16);
   --iris-border: oklch(0.72 0.16 286 / 0.45);
-  --iris-glow: oklch(0.68 0.19 290); /* brighter, bluer iris for blooms + shadows */
   --ink-on-accent: oklch(0.17 0.03 286);
 
   /* ---- Warm signal: amber survives as the spectrum's warm end ---- */
@@ -30,7 +29,7 @@
   /* ---- Functional accents ---- */
   --cyan: oklch(0.84 0.1 210); /* inline code / mono values */
   --license: oklch(0.83 0.14 158); /* CC0 / permissive */
-  --license-border: oklch(from var(--license) l c h / 0.32);
+  --license-border: oklch(0.83 0.14 158 / 0.32); /* --license at 32% */
 
   --maxw: 1080px;
   --radius: 18px;
@@ -104,11 +103,11 @@ body {
 .atmosphere-bloom {
   position: absolute;
   inset: 0 0 auto 0;
-  height: min(1100px, 132vh);
+  height: min(1100px, 100%); /* capped to page height so it never adds scroll on short pages */
   z-index: var(--z-atmosphere);
   pointer-events: none;
   background-image:
-    radial-gradient(60% 62% at 50% -8%, oklch(from var(--iris-glow) l c h / 0.34), transparent 72%),
+    radial-gradient(60% 62% at 50% -8%, oklch(0.68 0.19 290 / 0.34), transparent 72%),
     radial-gradient(40% 52% at 8% -4%, oklch(0.8 0.12 200 / 0.2), transparent 64%),
     radial-gradient(44% 54% at 92% 2%, oklch(0.7 0.23 340 / 0.24), transparent 66%),
     radial-gradient(46% 48% at 80% 22%, oklch(0.82 0.14 70 / 0.16), transparent 64%);
@@ -200,13 +199,13 @@ p {
 
 @keyframes live-pulse {
   0% {
-    box-shadow: 0 0 0 0 oklch(from var(--amber) l c h / 0.55);
+    box-shadow: 0 0 0 0 oklch(0.82 0.13 73 / 0.55);
   }
   70% {
-    box-shadow: 0 0 0 7px oklch(from var(--amber) l c h / 0);
+    box-shadow: 0 0 0 7px oklch(0.82 0.13 73 / 0);
   }
   100% {
-    box-shadow: 0 0 0 0 oklch(from var(--amber) l c h / 0);
+    box-shadow: 0 0 0 0 oklch(0.82 0.13 73 / 0);
   }
 }
 
@@ -308,7 +307,7 @@ p {
   background: var(--base-2);
   padding: 10px;
   box-shadow: 0 40px 120px -40px oklch(0 0 0 / 0.8),
-    0 0 80px -30px oklch(from var(--iris-glow) l c h / 0.45),
+    0 0 80px -30px oklch(0.68 0.19 290 / 0.45),
     0 0 0 1px oklch(1 0 0 / 0.03) inset;
   position: relative;
 }
@@ -364,7 +363,7 @@ p {
 .card:hover {
   border-color: var(--iris-border);
   transform: translateY(-3px);
-  box-shadow: 0 24px 60px -34px oklch(from var(--iris-glow) l c h / 0.5);
+  box-shadow: 0 24px 60px -34px oklch(0.68 0.19 290 / 0.5);
 }
 
 .card-shot {

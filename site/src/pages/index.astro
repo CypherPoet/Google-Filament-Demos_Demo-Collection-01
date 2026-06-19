@@ -27,7 +27,6 @@ import { site, demos, transferNotes } from '../data/content';
           <video
             src="/media/spin.mp4"
             poster="/media/spin-poster.png"
-            autoplay
             loop
             muted
             playsinline
@@ -176,12 +175,23 @@ npm run ios</pre>
   </div>
 
   <script>
-    // Respect reduced-motion: stop the auto-spin and let the user start it.
+    // The hero video has no `autoplay` in markup, so reduced-motion users never
+    // see it start. Start it from JS only when motion is allowed, and react if
+    // the OS setting changes mid-session.
     const spin = document.querySelector<HTMLVideoElement>('.phone-screen video');
-    if (spin && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      spin.removeAttribute('autoplay');
-      spin.setAttribute('controls', '');
-      spin.pause();
+    if (spin) {
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+      const applyMotionPref = () => {
+        if (reduceMotion.matches) {
+          spin.pause();
+          spin.setAttribute('controls', '');
+        } else {
+          spin.removeAttribute('controls');
+          void spin.play().catch(() => {});
+        }
+      };
+      applyMotionPref();
+      reduceMotion.addEventListener('change', applyMotionPref);
     }
 
     const lb = document.getElementById('lightbox');
