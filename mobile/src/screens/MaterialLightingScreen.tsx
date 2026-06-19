@@ -78,7 +78,12 @@ function LightingStage({ demo, onBack }: Props) {
           onLayout={onLayout}>
           <FilamentView style={StyleSheet.absoluteFill}>
             <StableEnvironmentalLight intensity={IBL_AMBIENT} />
+            {/* react-native-filament's <Light> applies its props on mount and
+                does not re-apply them in place, so swapping a preset left the
+                scene unlit-by-the-key-light. Key on the preset to remount the
+                light with the new intensity / temperature / direction. */}
             <Light
+              key={presetId}
               type="directional"
               intensity={preset.dir}
               colorKelvin={preset.kelvin}
