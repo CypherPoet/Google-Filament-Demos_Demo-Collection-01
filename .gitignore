@@ -31,6 +31,9 @@ mobile/.metro/
 site/dist/
 site/.astro/
 
+# Netlify CLI local link state
+.netlify/
+
 # Editor
 .vscode/
 .idea/
