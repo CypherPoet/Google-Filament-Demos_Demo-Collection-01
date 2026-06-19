@@ -55,6 +55,9 @@ export function SegmentedControl<T extends string>({
           <Pressable
             key={option.value}
             onPress={() => onChange(option.value)}
+            accessibilityRole="button"
+            accessibilityState={{ selected: active }}
+            accessibilityLabel={option.label}
             style={[styles.segment, active && styles.segmentActive]}
             hitSlop={6}>
             <Text style={[styles.segmentText, active && styles.segmentTextActive]}>
@@ -83,6 +86,8 @@ export function ActionButton({
     <Pressable
       onPress={onPress}
       hitSlop={8}
+      accessibilityRole="button"
+      accessibilityLabel={label ?? glyph}
       style={({ pressed }) => [
         styles.action,
         tone === 'accent' && styles.actionAccent,

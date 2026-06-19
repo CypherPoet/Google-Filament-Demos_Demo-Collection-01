@@ -38,7 +38,12 @@ export function DemoScaffold({
         pointerEvents="box-none"
         style={[styles.header, { paddingTop: insets.top + spacing.sm }]}>
         <View style={styles.headerRow}>
-          <Pressable onPress={onBack} hitSlop={12} style={styles.back}>
+          <Pressable
+            onPress={onBack}
+            hitSlop={12}
+            accessibilityRole="button"
+            accessibilityLabel="Back to demos"
+            style={styles.back}>
             <Text style={styles.backGlyph}>‹</Text>
           </Pressable>
           <View style={styles.headerText}>

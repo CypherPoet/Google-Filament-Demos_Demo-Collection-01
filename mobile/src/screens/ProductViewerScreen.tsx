@@ -6,6 +6,7 @@ import {
   Camera,
   FilamentScene,
   FilamentView,
+  Float3,
   ModelRenderer,
   useModel,
 } from 'react-native-filament';
@@ -24,6 +25,15 @@ const PRODUCTS: SegmentOption<ModelId>[] = [
   { value: 'toyCar', label: 'Toy Car' },
   { value: 'waterBottle', label: 'Bottle' },
 ];
+
+// Each product is normalised to a unit cube, but their proportions differ, so a
+// per-model home distance gives each a comfortable starting frame. Users can
+// still pinch from there.
+const FRAMING: Partial<Record<ModelId, Float3>> = {
+  boomBox: [0, 0.25, 7.5],
+  toyCar: [0, 0.35, 6.8],
+  waterBottle: [0, 0.1, 6.2],
+};
 
 export function ProductViewerScreen({ demo, onBack }: Props) {
   const [modelId, setModelId] = useState<ModelId>('boomBox');
@@ -64,7 +74,7 @@ function ProductStage({
   const model = useModel(meta.source);
   const loading = model.state !== 'loaded';
   const { cameraManipulator, gesture, onLayout } = useOrbitControls({
-    orbitHomePosition: [0, 0.3, 3.6],
+    orbitHomePosition: FRAMING[modelId] ?? [0, 0.3, 7],
   });
 
   return (

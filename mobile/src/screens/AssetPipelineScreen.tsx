@@ -15,7 +15,7 @@ import { MODELS } from '../assets';
 import { DemoScaffold } from '../components/DemoScaffold';
 import { StudioLight } from '../components/lighting';
 import { useOrbitControls } from '../components/useOrbitControls';
-import { InfoChip, SegmentedControl, SegmentOption } from '../components/ui';
+import { ActionButton, InfoChip, SegmentedControl, SegmentOption } from '../components/ui';
 import { Demo } from '../data/demos';
 import { colors, spacing, typography } from '../theme';
 
@@ -42,6 +42,7 @@ function PipelineStage({ demo, onBack }: Props) {
   const insets = useSafeAreaInsets();
   const [clipIndex, setClipIndex] = useState(0);
   const [clips, setClips] = useState<AnimationItem[]>([]);
+  const [playing, setPlaying] = useState(true);
 
   const meta = MODELS.fox;
   const model = useModel(meta.source);
@@ -57,6 +58,9 @@ function PipelineStage({ demo, onBack }: Props) {
       }))
     : FALLBACK_CLIPS;
 
+  const activeClip = clips.find(clip => clip.index === clipIndex);
+  const durationLabel = activeClip ? `${activeClip.duration.toFixed(1)}s` : '—';
+
   return (
     <View style={styles.root}>
       <GestureDetector gesture={gesture}>
@@ -67,11 +71,15 @@ function PipelineStage({ demo, onBack }: Props) {
           <FilamentView style={StyleSheet.absoluteFill}>
             <StudioLight keyIntensity={14000} />
             <ModelRenderer model={model} transformToUnitCube>
-              <Animator
-                animationIndex={clipIndex}
-                transitionDuration={0.25}
-                onAnimationsLoaded={setClips}
-              />
+              {/* The library pauses/plays by mounting/unmounting the Animator;
+                  while unmounted the model holds its last posed frame. */}
+              {playing && (
+                <Animator
+                  animationIndex={clipIndex}
+                  transitionDuration={0.25}
+                  onAnimationsLoaded={setClips}
+                />
+              )}
             </ModelRenderer>
             <Camera
               cameraManipulator={cameraManipulator}
@@ -90,8 +98,22 @@ function PipelineStage({ demo, onBack }: Props) {
         <SegmentedControl
           options={clipOptions}
           value={String(clipIndex)}
-          onChange={value => setClipIndex(Number(value))}
+          onChange={value => {
+            setClipIndex(Number(value));
+            setPlaying(true);
+          }}
         />
+        <View style={styles.controlRow}>
+          <Text style={styles.hint}>
+            {playing ? 'Playing' : 'Paused'} · {durationLabel} clip
+          </Text>
+          <ActionButton
+            glyph={playing ? '⏸' : '▶'}
+            label={playing ? 'Pause' : 'Play'}
+            tone="accent"
+            onPress={() => setPlaying(p => !p)}
+          />
+        </View>
         <View style={styles.chips}>
           <InfoChip label="Source" value="multi-file glTF" />
           <InfoChip label="Tool" value="gltf-pipeline" />
@@ -111,6 +133,13 @@ function PipelineStage({ demo, onBack }: Props) {
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.base },
+  controlRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: spacing.md,
+  },
+  hint: { ...typography.body, color: colors.textDim, flexShrink: 1 },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
   note: { ...typography.body, color: colors.textSecondary, lineHeight: 20 },
   noteAccent: { color: colors.accent, fontWeight: '600' },
