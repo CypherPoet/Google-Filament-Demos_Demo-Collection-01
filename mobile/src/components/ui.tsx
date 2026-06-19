@@ -60,7 +60,11 @@ export function SegmentedControl<T extends string>({
             accessibilityLabel={option.label}
             style={[styles.segment, active && styles.segmentActive]}
             hitSlop={6}>
-            <Text style={[styles.segmentText, active && styles.segmentTextActive]}>
+            <Text
+              style={[styles.segmentText, active && styles.segmentTextActive]}
+              numberOfLines={1}
+              adjustsFontSizeToFit
+              minimumFontScale={0.8}>
               {option.label}
             </Text>
           </Pressable>
@@ -145,7 +149,7 @@ const styles = StyleSheet.create({
   segment: {
     flex: 1,
     paddingVertical: spacing.sm,
-    paddingHorizontal: spacing.sm,
+    paddingHorizontal: spacing.xs,
     borderRadius: radius.pill,
     alignItems: 'center',
     justifyContent: 'center',
