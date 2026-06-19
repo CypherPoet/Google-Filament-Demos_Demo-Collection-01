@@ -12,7 +12,10 @@ import { site, demos, transferNotes } from '../data/content';
         <h1>Filament<br /><span class="accent">Demo Lab</span></h1>
         <p class="hero-lede">{site.tagline}</p>
         <div class="hero-actions">
-          <a class="btn btn-primary" href={site.repo}>View source ↗</a>
+          <a class="btn btn-primary" href={site.repo}>
+            <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5c.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34c-.46-1.16-1.11-1.47-1.11-1.47c-.91-.62.07-.6.07-.6c1 .07 1.53 1.03 1.53 1.03c.87 1.52 2.34 1.07 2.91.83c.09-.65.35-1.09.63-1.34c-2.22-.25-4.55-1.11-4.55-4.92c0-1.11.38-2 1.03-2.71c-.1-.25-.45-1.29.1-2.64c0 0 .84-.27 2.75 1.02c.79-.22 1.65-.33 2.5-.33s1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02c.55 1.35.2 2.39.1 2.64c.65.71 1.03 1.6 1.03 2.71c0 3.82-2.34 4.66-4.57 4.91c.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2"/></svg>
+            View source
+          </a>
           <a class="btn" href="#demos">Explore the demos</a>
         </div>
         <div class="hero-stack">
@@ -33,44 +36,6 @@ import { site, demos, transferNotes } from '../data/content';
       </div>
     </div>
   </header>
-
-  <!-- ===== What this is ===== -->
-  <section class="section" id="about">
-    <div class="container">
-      <span class="eyebrow">What this is</span>
-      <h2 class="section-title">A mobile-native rendering project — not a browser demo</h2>
-      <div class="cols-2 prose" style="margin-top:28px">
-        <div>
-          <p>
-            <strong>Filament Demo Lab</strong> is a React Native app built on
-            <a class="mono" href={site.rnFilamentUrl}>react-native-filament</a>, Margelo's
-            binding to <a class="mono" href={site.filamentUrl}>Google Filament</a>. Filament is a
-            real-time physically-based renderer; on iOS it draws through Metal, on Android through
-            Vulkan/OpenGL. The rendering runs <strong>natively on the device</strong> — there is no
-            WebGL and no browser canvas involved.
-          </p>
-          <p>
-            Because of that, this website is a <strong>showcase, not the runtime</strong>. It
-            documents the work with screenshots, write-ups, and the full source — the live 3D runs
-            on an iOS Simulator or device.
-          </p>
-        </div>
-        <div>
-          <p>
-            Three.js is not used in the app, but prior Three.js, Blender, and Godot experience maps
-            cleanly onto Filament: the same scene graph, PBR materials, cameras, lights, IBL, glTF
-            assets, and animation concepts all carry over. The
-            <a href="#transfer">transfer notes</a> below line the two APIs up side by side.
-          </p>
-          <div class="note">
-            The four demos cover the practical surface area of a real 3D feature: loading GLB
-            assets, framing a camera, lighting a scene, handling gestures, swapping materials, and
-            playing skeletal animation.
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
 
   <!-- ===== Demo gallery ===== -->
   <section class="section" id="demos">
