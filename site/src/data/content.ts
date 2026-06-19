@@ -20,6 +20,8 @@ export type DemoCard = {
   title: string;
   tagline: string;
   image: string;
+  /** Optional screen recording; the lightbox plays this and uses `image` as its poster. */
+  video?: string;
   demonstrates: string[];
   model: string;
 };
@@ -32,6 +34,7 @@ export const demos: DemoCard[] = [
     tagline:
       'The simplest clean scene: one model, the engine’s default image-based lighting, and a gentle auto-spin.',
     image: '/media/demo-basic.png',
+    video: '/media/spin.mp4',
     demonstrates: [
       'FilamentScene / FilamentView setup',
       'Loading a .glb with <Model>',
@@ -47,6 +50,7 @@ export const demos: DemoCard[] = [
     tagline:
       'A portfolio-style viewer: drag to orbit, pinch to zoom, switch between three products, and reset the view.',
     image: '/media/demo-product.png',
+    video: '/media/demo-product.mp4',
     demonstrates: [
       'useCameraManipulator (orbit camera)',
       'react-native-gesture-handler pan + pinch',
@@ -77,6 +81,7 @@ export const demos: DemoCard[] = [
     tagline:
       'Skeletal animation playback plus the real glTF → GLB pipeline used to prepare every asset in the app.',
     image: '/media/demo-pipeline.png',
+    video: '/media/demo-pipeline.mp4',
     demonstrates: [
       '<Animator> skeletal clip playback with cross-fade',
       'Switching animation clips at runtime',
