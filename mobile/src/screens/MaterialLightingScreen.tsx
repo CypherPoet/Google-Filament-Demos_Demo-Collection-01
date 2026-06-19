@@ -36,13 +36,16 @@ type LightingPreset = {
 // buffer is released by <EnvironmentalLight> after the first frame, so changing
 // its intensity at runtime would double-release the buffer and crash. The visual
 // variety across presets therefore comes from the directional key light.
-const IBL_AMBIENT = 16000;
+// Deliberately low so the directional key light — the thing that actually
+// changes between presets — drives the look instead of being washed out by a
+// bright, unchanging ambient.
+const IBL_AMBIENT = 6500;
 
 const PRESETS: Record<PresetId, LightingPreset> = {
-  studio: { label: 'Studio', dir: 13000, kelvin: 6500, direction: [0.3, -0.7, -0.6] },
-  sunset: { label: 'Sunset', dir: 24000, kelvin: 3000, direction: [-0.85, -0.25, -0.45] },
-  night: { label: 'Night', dir: 6000, kelvin: 9000, direction: [0.2, -0.85, 0.3] },
-  showroom: { label: 'Showroom', dir: 28000, kelvin: 5600, direction: [0, -0.9, -0.5] },
+  studio: { label: 'Studio', dir: 18000, kelvin: 6500, direction: [0.35, -0.6, -0.7] },
+  sunset: { label: 'Sunset', dir: 30000, kelvin: 2300, direction: [-0.92, -0.18, -0.35] },
+  night: { label: 'Night', dir: 3500, kelvin: 11500, direction: [0.25, -0.8, 0.35] },
+  showroom: { label: 'Showroom', dir: 46000, kelvin: 5600, direction: [0, -0.85, -0.55] },
 };
 
 const PRESET_OPTIONS: SegmentOption<PresetId>[] = (
@@ -66,7 +69,8 @@ function LightingStage({ demo, onBack }: Props) {
   const model = useModel(meta.source);
   const loading = model.state !== 'loaded';
   const { cameraManipulator, gesture, onLayout } = useOrbitControls({
-    orbitHomePosition: [0, 0.1, 3.4],
+    orbitHomePosition: [0, 0.15, 6],
+    targetPosition: [0, 0.15, 0],
   });
 
   return (
@@ -113,7 +117,7 @@ function LightingStage({ demo, onBack }: Props) {
         <View style={styles.chips}>
           <InfoChip label="Key light" value={`${Math.round(preset.dir / 1000)}k lux`} />
           <InfoChip label="Temp" value={`${preset.kelvin}K`} />
-          <InfoChip label="IBL" value="16k ambient" />
+          <InfoChip label="IBL" value="6.5k ambient" />
         </View>
         <Text style={styles.note}>
           <Text style={styles.noteAccent}>Runtime in Filament:</Text> directional
