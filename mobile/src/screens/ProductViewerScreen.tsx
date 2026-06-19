@@ -32,9 +32,12 @@ export function ProductViewerScreen({ demo, onBack }: Props) {
   return (
     <FilamentScene>
       <ProductStage
-        // Remounting on reset recreates the camera manipulator at its home
-        // position; `modelId` lives here so the selection survives a reset.
-        key={resetNonce}
+        // Key on model + reset so each forces a clean remount. Swapping the
+        // model source in place makes the library's useModel double-release the
+        // previous FilamentAsset on this stack ("...has already been manually
+        // released!"); a fresh mount per model loads/disposes cleanly. Remount
+        // also recreates the camera manipulator at its home position.
+        key={`${modelId}-${resetNonce}`}
         demo={demo}
         onBack={onBack}
         modelId={modelId}
