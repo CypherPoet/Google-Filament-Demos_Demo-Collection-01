@@ -38,8 +38,10 @@ site/.astro/
 .vscode/
 .idea/
 
-# Claude Code session tooling + internal planning brief (not project deliverables)
-.claude/
+# Claude Code session tooling + internal planning brief (not project deliverables).
+# Keep session handoffs tracked — they're durable, shareable continuation records.
+.claude/*
+!.claude/handoffs/
 docs/private/
 
 # Keep the .glb model assets and captured showcase media committed — they are
