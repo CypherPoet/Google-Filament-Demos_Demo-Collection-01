@@ -85,10 +85,18 @@ import { site, demos, models, transferNotes } from '../data/content';
         {
           demos.map((demo) => (
             <article class="card">
-              <div class="card-shot">
+              <button
+                class="card-shot"
+                type="button"
+                data-lightbox
+                data-img={demo.image}
+                data-title={demo.title}
+                data-caption={demo.tagline}
+                aria-label={`View the full ${demo.title} screenshot`}>
                 <span class="card-num">DEMO {demo.num}</span>
                 <img src={demo.image} alt={`${demo.title} demo screen`} loading="lazy" />
-              </div>
+                <span class="card-zoom" aria-hidden="true">⤢</span>
+              </button>
               <div class="card-body">
                 <h3>{demo.title}</h3>
                 <p class="tagline">{demo.tagline}</p>
@@ -264,4 +272,67 @@ npm run build   <span class="c"># → dist/</span></pre>
       <span><a href={site.repo}>Source</a> · <a href={site.rnFilamentUrl}>react-native-filament</a> · <a href={site.filamentUrl}>Google Filament</a></span>
     </div>
   </footer>
+
+  <!-- ===== Lightbox (full-resolution screenshot viewer) ===== -->
+  <div
+    class="lightbox"
+    id="lightbox"
+    hidden
+    role="dialog"
+    aria-modal="true"
+    aria-label="Screenshot viewer">
+    <button class="lightbox-close" type="button" aria-label="Close screenshot viewer">✕</button>
+    <figure class="lightbox-figure">
+      <img id="lightbox-img" src="" alt="" />
+      <figcaption id="lightbox-caption"></figcaption>
+    </figure>
+  </div>
+
+  <script>
+    const lb = document.getElementById('lightbox');
+    const lbImg = document.getElementById('lightbox-img') as HTMLImageElement | null;
+    const lbCaption = document.getElementById('lightbox-caption');
+    const closeBtn = lb?.querySelector('.lightbox-close') as HTMLButtonElement | null;
+    let lastFocused: HTMLElement | null = null;
+
+    function openLightbox(src: string, title: string, caption: string) {
+      if (!lb || !lbImg) return;
+      lbImg.src = src;
+      lbImg.alt = title ? `${title} demo screen` : '';
+      if (lbCaption) lbCaption.textContent = caption ? `${title} — ${caption}` : title;
+      lb.hidden = false;
+      document.body.style.overflow = 'hidden';
+      requestAnimationFrame(() => lb.classList.add('is-open'));
+      closeBtn?.focus();
+    }
+
+    function closeLightbox() {
+      if (!lb || lb.hidden) return;
+      lb.classList.remove('is-open');
+      document.body.style.overflow = '';
+      window.setTimeout(() => {
+        if (!lb.classList.contains('is-open')) lb.hidden = true;
+      }, 220);
+      lastFocused?.focus();
+    }
+
+    document.querySelectorAll<HTMLElement>('[data-lightbox]').forEach((el) => {
+      el.addEventListener('click', () => {
+        lastFocused = el;
+        openLightbox(
+          el.dataset.img ?? '',
+          el.dataset.title ?? '',
+          el.dataset.caption ?? '',
+        );
+      });
+    });
+
+    closeBtn?.addEventListener('click', closeLightbox);
+    lb?.addEventListener('click', (e) => {
+      if (e.target === lb) closeLightbox();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeLightbox();
+    });
+  </script>
 </Base>
