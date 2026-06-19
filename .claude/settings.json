@@ -1,5 +1,19 @@
 {
   "enabledPlugins": {
     "netlify-skills@netlify-context-and-tools": true
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -d \"$CLAUDE_PROJECT_DIR/site/node_modules\" ] || npm --prefix \"$CLAUDE_PROJECT_DIR/site\" ci; [ -d \"$CLAUDE_PROJECT_DIR/mobile/node_modules\" ] || npm --prefix \"$CLAUDE_PROJECT_DIR/mobile\" ci",
+            "timeout": 600,
+            "statusMessage": "Installing worktree deps"
+          }
+        ]
+      }
+    ]
   }
 }

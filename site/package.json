@@ -4,8 +4,11 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "predev": "[ -d node_modules ] || npm ci",
     "dev": "astro dev",
+    "prebuild": "[ -d node_modules ] || npm ci",
     "build": "astro build",
+    "prepreview": "[ -d node_modules ] || npm ci",
     "preview": "astro preview",
     "check": "astro check"
   },
